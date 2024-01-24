@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "No changes to commit."
+msgstr "No changes to commit."
+
+msgid "Error generating commit message."
+msgstr "Error generating commit message."
+
+msgid "Changes successfully committed and pushed to branch"
+msgstr "Changes successfully committed and pushed to branch"
