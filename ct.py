@@ -1,7 +1,7 @@
 import requests
 import subprocess
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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 "
 
 def get_current_branch():
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
@@ -40,9 +40,4 @@ def git_commit_push():
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
 
-while True:
-    command = input("Enter command: ")
-    if command == "ct":
-        git_commit_push()
-    elif command == "exit":
-        break
+git_commit_push()
