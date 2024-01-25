@@ -1,13 +1,17 @@
 import requests
 import subprocess
 
-OPENAI_API_KEY = "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 "
+OPENAI_API_KEY = "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"
 
 def get_current_branch():
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
     return result.stdout.strip()
 
 def get_git_diff():
+    # Добавление всех измененных файлов в индекс
+    subprocess.run(["git", "add", "."], check=True)
+    
+    # Получение деталей изменений
     result = subprocess.run(["git", "diff", "--cached"], capture_output=True, text=True)
     return result.stdout
 
@@ -24,8 +28,6 @@ def generate_commit_message(diff_output):
 
 def git_commit_push():
     try:
-        subprocess.run(["git", "add", "."], check=True)
-
         diff_output = get_git_diff()
         commit_message = generate_commit_message(diff_output)
         if not commit_message:
