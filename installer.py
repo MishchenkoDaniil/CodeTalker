@@ -3,6 +3,8 @@ import shutil
 import configparser
 import sys
 
+awdawdwad
+
 def copy_localization_files(language):
     """ Copies localization files for the selected language """
     src_dir = os.path.join("locales", language, "LC_MESSAGES")
