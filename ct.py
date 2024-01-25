@@ -22,9 +22,20 @@ def generate_commit_message(diff_output):
         "prompt": f"Write a commit message based on these code changes:\n\n{diff_output}",
         "max_tokens": 60
     }
-    # Замените 'davinci-codex' на актуальное название модели, например 'text-davinci-003'
-    response = requests.post("https://api.openai.com/v1/engines/gpt-3.5-turbo/completions", headers=headers, json=data)
-    return response.json().get("choices", [{}])[0].get("text", "").strip()
+
+    try:
+        response = requests.post("https://api.openai.com/v1/engines/gpt-3.5-turbo-instruct/completions", headers=headers, json=data)
+
+        if response.status_code == 200:
+            return response.json().get("choices", [{}])[0].get("text", "").strip()
+        else:
+            print(f"Failed to get commit message. Status code: {response.status_code}")
+            print("Response:", response.text)
+            return None
+
+    except requests.RequestException as e:
+        print(f"An error occurred while making API request: {e}")
+        return None
 
 def git_commit_push():
     try:
