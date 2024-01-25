@@ -23,7 +23,7 @@ def generate_commit_message(diff_output):
         "max_tokens": 60
     }
     # Замените 'davinci-codex' на актуальное название модели, например 'text-davinci-003'
-    response = requests.post("https://api.openai.com/v1/engines/gpt-3.5-turbo-instruct/completions", headers=headers, json=data)
+    response = requests.post("https://api.openai.com/v1/engines/gpt-3.5-turbo/completions", headers=headers, json=data)
     return response.json().get("choices", [{}])[0].get("text", "").strip()
 
 def git_commit_push():
