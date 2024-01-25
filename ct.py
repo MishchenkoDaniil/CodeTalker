@@ -2,20 +2,19 @@ import requests
 import subprocess
 
 OPENAI_API_KEY = "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"
-
 def get_current_branch():
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
     return result.stdout.strip()
 
 def get_git_diff():
-    # Добавление всех измененных файлов в индекс
     subprocess.run(["git", "add", "."], check=True)
-    
-    # Получение деталей изменений
     result = subprocess.run(["git", "diff", "--cached"], capture_output=True, text=True)
     return result.stdout
 
 def generate_commit_message(diff_output):
+    if not diff_output.strip():
+        return "No changes to commit"
+
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}"
     }
@@ -24,12 +23,17 @@ def generate_commit_message(diff_output):
         "max_tokens": 60
     }
     response = requests.post("https://api.openai.com/v1/engines/davinci-codex/completions", headers=headers, json=data)
+    print("Response from OpenAI:", response.json())  # Отладочная печать
     return response.json().get("choices", [{}])[0].get("text", "").strip()
 
 def git_commit_push():
     try:
         diff_output = get_git_diff()
+        print("Git diff output:", diff_output)  # Отладочная печать
+
         commit_message = generate_commit_message(diff_output)
+        print("Generated commit message:", commit_message)  # Отладочная печать
+
         if not commit_message:
             commit_message = "Minor changes"
 
