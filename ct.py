@@ -1,7 +1,10 @@
 import requests
 import subprocess
+import os
 
-OPENAI_API_KEY = "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"
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 def get_current_branch():
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
     return result.stdout.strip()
@@ -12,9 +15,6 @@ def get_git_diff():
     return result.stdout
 
 def generate_commit_message(diff_output):
-    if not diff_output.strip():
-        return "No changes to commit"
-
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}"
     }
@@ -22,8 +22,8 @@ def generate_commit_message(diff_output):
         "prompt": f"Write a commit message based on these code changes:\n\n{diff_output}",
         "max_tokens": 60
     }
-    response = requests.post("https://api.openai.com/v1/engines/davinci-codex/completions", headers=headers, json=data)
-    print("Response from OpenAI:", response.json())  # Отладочная печать
+    # Замените 'davinci-codex' на актуальное название модели, например 'text-davinci-003'
+    response = requests.post("https://api.openai.com/v1/engines/gpt-3.5-turbo-instruct/completions", headers=headers, json=data)
     return response.json().get("choices", [{}])[0].get("text", "").strip()
 
 def git_commit_push():
