@@ -1,7 +1,7 @@
 import requests
 import subprocess
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 def get_current_branch():
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True)
     return result.stdout.strip()
